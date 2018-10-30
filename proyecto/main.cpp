@@ -12,9 +12,9 @@ using namespace std;
 int main(int argc, char **argv) {
 
     ArbolBinario<par> arbol;
-    par palabras;
-    ifstream diccionario, entrada, salida;
-    string linea;
+    par palabras, busca;
+    ifstream diccionario, entrada;
+    string linea, palabra = "", salida;
 
     for(int i = 0;i < argc;i++){
         if(strcmp(argv[i], "-l") == 0)
@@ -22,7 +22,7 @@ int main(int argc, char **argv) {
         else if(strcmp(argv[i], "-i") == 0)
             entrada.open(argv[i+1]);
         else if(strcmp(argv[i], "-o") == 0)
-            salida.open(argv[i+1]);
+            salida = argv[i+1];
     }
 
 
@@ -33,19 +33,26 @@ int main(int argc, char **argv) {
         arbol.put(palabras);
     }
 
-    //arbol.inorder();
+    std::ofstream outfile (salida);
 
-    while(getline(entrada, linea)){
-        par busca;
-        busca.set(linea, "");
+    char aux;
+    while (entrada >> aux){
+        if((aux > 64 && aux < 91))
+            aux += 32;
 
+        if(aux > 96 && aux < 123){
+            palabra += aux;
+        }
+
+        busca.set(palabra, "");
         try{
-            cout << arbol.search(busca).getDecodificado() << endl;
+            outfile << arbol.search(busca).getDecodificado();
         }catch(int e){
 
         }
-
     }
+
+    outfile.close();
 
     return 0;
 }
