@@ -10,7 +10,7 @@
 using namespace std;
 
 int main(int argc, char **argv) {
-	
+
     ArbolBinario<par> arbol;
     par palabras, busca;
     ifstream diccionario, entrada;
@@ -35,11 +35,10 @@ int main(int argc, char **argv) {
 
     std::ofstream outfile (salida);
 
-    char aux;
+    unsigned char aux;
     while (entrada >> aux){        
-        try{
-        	
-        	if(aux == 181)
+        try{     
+			if(aux == 181)
     			aux = 160;
     		
     		if(aux == 144)
@@ -55,16 +54,15 @@ int main(int argc, char **argv) {
     			aux = 163;
     	
         	if(aux <= 90 && aux >= 65)
-            	aux += 32;
-            	
-        	if((aux <= 122 && aux >= 97) || aux == 160 || aux == 130 || aux == 161 || aux == 162 || aux == 163){        		
+            	aux += 32;            	
+            				
+        	if((aux <= 122 && aux >= 97) || aux == 160 || aux == 130 || aux == 161 || aux == 162 || aux == 163){ 
             	palabra += aux;
         	}else{		
         		busca.set(palabra, "");
         		outfile << arbol.search(busca).getDecodificado() << aux ;	
         		palabra = "";
-			}
-		            
+			}		            
         }catch(int e){
 
         }
