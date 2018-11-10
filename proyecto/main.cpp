@@ -10,11 +10,13 @@
 using namespace std;
 
 int main(int argc, char **argv) {
-
+	
     ArbolBinario<par> arbol;
     par palabras, busca;
     ifstream diccionario, entrada;
     string linea, palabra = "", salida;
+    
+    entrada >> noskipws;
 
     for(int i = 0;i < argc;i++){
         if(strcmp(argv[i], "-l") == 0)
@@ -24,29 +26,45 @@ int main(int argc, char **argv) {
         else if(strcmp(argv[i], "-o") == 0)
             salida = argv[i+1];
     }
-
-
-
+    
     while(getline(diccionario, linea)){
         unsigned long count = linea.find('\t');
-        palabras.set(linea.substr(0, count), linea.substr(count, linea.length()));
+        palabras.set(linea.substr(0, count), linea.substr(count+1, linea.length()));
         arbol.put(palabras);
     }
 
     std::ofstream outfile (salida);
 
     char aux;
-    while (entrada >> aux){
-        if((aux > 64 && aux < 91))
-            aux += 32;
-
-        if(aux > 96 && aux < 123){
-            palabra += aux;
-        }
-
-        busca.set(palabra, "");
+    while (entrada >> aux){        
         try{
-            outfile << arbol.search(busca).getDecodificado();
+        	
+        	if(aux == 181)
+    			aux = 160;
+    		
+    		if(aux == 144)
+    			aux = 130;
+    		
+    		if(aux == 214)
+    			aux = 161;
+    	
+    		if(aux == 224)
+    			aux = 162;
+    		
+    		if(aux == 233)
+    			aux = 163;
+    	
+        	if(aux <= 90 && aux >= 65)
+            	aux += 32;
+            	
+        	if((aux <= 122 && aux >= 97) || aux == 160 || aux == 130 || aux == 161 || aux == 162 || aux == 163){        		
+            	palabra += aux;
+        	}else{		
+        		busca.set(palabra, "");
+        		outfile << arbol.search(busca).getDecodificado() << aux ;	
+        		palabra = "";
+			}
+		            
         }catch(int e){
 
         }
