@@ -11,60 +11,71 @@ using namespace std;
 
 int main(int argc, char **argv) {
 
-    ArbolBinario<par> arbol;
-    par palabras, busca;
+    par busca, palabras;
     ifstream diccionario, entrada;
-    string linea, palabra = "", salida;
+    string linea, palabra, salida;
+    unsigned char aux;
+    bool mayuscula = false;
+    string sOut, simbolo;
+
+    auto *arbol = new ArbolBinario<par>;
     
     entrada >> noskipws;
 
-    for(int i = 0;i < argc;i++){
-        if(strcmp(argv[i], "-l") == 0)
-            diccionario.open(argv[i+1]);
-        else if(strcmp(argv[i], "-i") == 0)
-            entrada.open(argv[i+1]);
-        else if(strcmp(argv[i], "-o") == 0)
-            salida = argv[i+1];
+    for(int i = 0;i < argc;i++) {
+        if (strcmp(argv[i], "-l") == 0) {
+            diccionario.open(argv[i + 1]);
+        } else if (strcmp(argv[i], "-i") == 0) {
+            entrada.open(argv[i + 1]);
+        } else if (strcmp(argv[i], "-o") == 0) {
+            salida = argv[i + 1];
+        }
     }
     
     while(getline(diccionario, linea)){
         unsigned long count = linea.find('\t');
         palabras.set(linea.substr(0, count), linea.substr(count+1, linea.length()));
-        arbol.put(palabras);
+        arbol->put(palabras);
     }
 
     std::ofstream outfile (salida);
 
-    unsigned char aux;
-    while (entrada >> aux){        
-        try{     
-			if(aux == 181)
-    			aux = 160;
-    		
-    		if(aux == 144)
-    			aux = 130;
-    		
-    		if(aux == 214)
-    			aux = 161;
-    	
-    		if(aux == 224)
-    			aux = 162;
-    		
-    		if(aux == 233)
-    			aux = 163;
-    	
-        	if(aux <= 90 && aux >= 65)
-            	aux += 32;            	
+    while (entrada >> aux){
+        try{
+		
+        	if(aux <= 90 && aux >= 65 || aux == 193 || aux == 201 || aux == 205 || aux == 211 || aux == 218) {
+                aux += 32;
+                mayuscula = true;
+            }
             				
-        	if((aux <= 122 && aux >= 97) || aux == 160 || aux == 130 || aux == 161 || aux == 162 || aux == 163){ 
+        	if((aux <= 122 && aux >= 97) || aux == 225 || aux == 233 || aux == 237 || aux == 243 || aux == 250){
             	palabra += aux;
-        	}else{		
-        		busca.set(palabra, "");
-        		outfile << arbol.search(busca).getDecodificado() << aux ;	
-        		palabra = "";
+        	}else{
+        	    if(palabra != "") {
+                    busca.set(palabra, "");                    
+                    sOut = arbol->search(busca).getDecodificado();
+                    if (mayuscula) {
+                        if((sOut[0] <= 122 && sOut[0] >= 97) || sOut[0] == 225 || sOut[0] == 233 || sOut[0] == 237 || sOut[0] == 243 || sOut[0] == 250) {
+                            sOut[0] = (char) (sOut[0] - 32);
+                        }
+                        mayuscula = false;
+                    }
+                    outfile << sOut;
+                    palabra = "";
+                }
+                outfile << aux;
 			}		            
         }catch(int e){
-
+        	sOut = palabra;
+        	outfile << sOut;
+        	if (mayuscula) {
+				if((sOut[0] <= 122 && sOut[0] >= 97) || sOut[0] == 225 || sOut[0] == 233 || sOut[0] == 237 || sOut[0] == 243 || sOut[0] == 250) {
+					sOut[0] = (char) (sOut[0] - 32);
+				}
+				mayuscula = false;
+            }
+        	outfile << aux;
+        	palabra = "";
         }
     }
 

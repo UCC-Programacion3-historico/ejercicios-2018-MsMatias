@@ -76,6 +76,7 @@ T ArbolBinario<T>::search(T dato) {
 
 template<class T>
 T ArbolBinario<T>::search(T dato, NodoArbol<T> *r) {
+		
     if (r == nullptr)
         throw 404;
 

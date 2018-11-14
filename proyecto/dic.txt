@@ -5,6 +5,7 @@ futuro	lo
 presente	el
 vida	y
 de	de
+más	menos
 mejor	pasado
 la	futuro
 el	vida
