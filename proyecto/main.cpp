@@ -54,6 +54,7 @@ int main(int argc, char **argv) {
         	    if(palabra != "") {
                     busca.set(palabra, "");                    
                     sOut = arbol->search(busca).getDecodificado();
+                    cout << sOut << endl;
                     if (mayuscula) {
                         if((sOut[0] <= 122 && sOut[0] >= 97) || sOut[0] == 225 || sOut[0] == 233 || sOut[0] == 237 || sOut[0] == 243 || sOut[0] == 250) {
                             sOut[0] = (char) (sOut[0] - 32);

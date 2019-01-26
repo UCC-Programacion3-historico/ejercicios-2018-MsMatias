@@ -22,6 +22,7 @@ public:
     string getCodificado();
     string getDecodificado();
     bool operator == (const par &p);
+    bool operator != (const par &p);
     bool operator > (const par &p);
     bool operator < (const par &p);
     bool operator >= (const par &p);
@@ -36,6 +37,11 @@ string par::getCodificado(){
 string par::getDecodificado(){
     return decodificado;
 }
+
+bool par::operator != (const par &p){
+    return codificado != p.codificado;
+}
+
 
 bool par::operator == (const par &p){
     return codificado == p.codificado;
